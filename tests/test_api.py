@@ -113,6 +113,24 @@ def test_sort_date_desc(client):
     assert items[1]["description"] == "older"
 
 
+def test_sort_date_asc(client):
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+    client.post(
+        "/expenses",
+        json=_sample(date=today.isoformat(), description="newer"),
+        headers={"Idempotency-Key": "sort-asc-1-newer"},
+    )
+    client.post(
+        "/expenses",
+        json=_sample(date=yesterday.isoformat(), description="older"),
+        headers={"Idempotency-Key": "sort-asc-2-older"},
+    )
+    items = client.get("/expenses", params={"sort": "date_asc"}).json()["expenses"]
+    assert items[0]["description"] == "older"
+    assert items[1]["description"] == "newer"
+
+
 def test_rejects_unknown_sort(client):
     r = client.get("/expenses", params={"sort": "amount_asc"})
     assert r.status_code == 400
