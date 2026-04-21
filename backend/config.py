@@ -37,4 +37,4 @@ ALLOWED_CATEGORIES: list[str] = [
 MAX_AMOUNT_PAISE: int = 10_00_00_000_00
 
 # Allowed sort tokens (kept explicit to reject arbitrary user input).
-ALLOWED_SORTS: set[str] = {"date_desc"}
+ALLOWED_SORTS: set[str] = {"date_desc", "date_asc"}

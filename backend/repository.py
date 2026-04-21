@@ -99,4 +99,6 @@ class ExpenseRepository:
         # appear in insertion order (newest first).
         if sort == "date_desc":
             q = q.order_by(desc(Expense.date), desc(Expense.created_at))
+        elif sort == "date_asc":
+            q = q.order_by(Expense.date, Expense.created_at)
         return [_to_dict(e) for e in q.all()]
