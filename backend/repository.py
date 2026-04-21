@@ -9,7 +9,6 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 from decimal import ROUND_HALF_UP, Decimal
-from typing import Optional, Tuple
 
 from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
@@ -43,8 +42,8 @@ class ExpenseRepository:
         self.db = db
 
     def create_with_idempotency(
-        self, data: ExpenseCreate, idempotency_key: Optional[str]
-    ) -> Tuple[dict, bool]:
+        self, data: ExpenseCreate, idempotency_key: str | None
+    ) -> tuple[dict, bool]:
         """Insert an expense, honouring idempotency.
 
         Returns (expense_dict, created). `created=False` indicates a replay:
@@ -91,7 +90,7 @@ class ExpenseRepository:
         return _to_dict(record), True
 
     def list(
-        self, *, category: Optional[str] = None, sort: str = "date_desc"
+        self, *, category: str | None = None, sort: str = "date_desc"
     ) -> list[dict]:
         q = self.db.query(Expense)
         if category:

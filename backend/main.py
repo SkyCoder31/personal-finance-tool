@@ -14,7 +14,6 @@ from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager
 from decimal import Decimal
-from typing import Optional
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -70,7 +69,7 @@ def health():
 def create_expense(
     payload: ExpenseCreate,
     response: Response,
-    idempotency_key: Optional[str] = Header(
+    idempotency_key: str | None = Header(
         default=None,
         alias="Idempotency-Key",
         description="Client-generated UUID to make retries safe.",
@@ -93,8 +92,8 @@ def create_expense(
 
 @app.get("/expenses", response_model=ExpenseList)
 def list_expenses(
-    category: Optional[str] = None,
-    sort: Optional[str] = None,
+    category: str | None = None,
+    sort: str | None = None,
     db: Session = Depends(get_db),
 ):
     if sort is not None and sort not in ALLOWED_SORTS:

@@ -78,7 +78,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Tight, readable styling. Streamlit's defaults work well — we just trim.
 st.markdown(
     """
     <style>
@@ -91,9 +90,6 @@ st.markdown(
 )
 
 
-# -------------------------
-# Session state bootstrap
-# -------------------------
 def _init_state() -> None:
     # The idempotency key is generated once per "draft" expense. It is
     # rotated only after a successful submission, so accidental double-
@@ -114,9 +110,6 @@ def _rotate_key() -> None:
     st.session_state.idempotency_key = str(uuid.uuid4())
 
 
-# -------------------------
-# Header + flash messages
-# -------------------------
 st.title("💸 Fenmo Expense Tracker")
 st.caption("Record and review your personal expenses.")
 
@@ -126,9 +119,6 @@ if st.session_state.flash:
     st.session_state.flash = None
 
 
-# -------------------------
-# Layout
-# -------------------------
 form_col, list_col = st.columns([1, 2], gap="large")
 
 with form_col:
@@ -167,7 +157,7 @@ with form_col:
             elif amount_value != amount_value.quantize(Decimal("0.01")):
                 errors.append("Amount can have at most 2 decimal places.")
 
-        if not description or not description.strip():
+        if not description.strip():
             errors.append("Description is required.")
         if not expense_date:
             errors.append("Date is required.")
@@ -217,13 +207,13 @@ with list_col:
         if st.button("Refresh", use_container_width=True):
             st.rerun()
 
+    load_error: str | None = None
     try:
         with st.spinner("Loading expenses..."):
             data = client.list_expenses(
                 category=None if filter_category == "All" else filter_category,
                 sort="date_desc",
             )
-        load_error: str | None = None
     except ExpenseAPIError as exc:
         load_error = str(exc)
         data = {"expenses": [], "total": "0", "count": 0}

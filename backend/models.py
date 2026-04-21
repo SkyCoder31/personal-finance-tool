@@ -9,8 +9,6 @@ from __future__ import annotations
 from datetime import date as _date
 from datetime import datetime
 from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
-from typing import List
-
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from backend.config import ALLOWED_CATEGORIES, MAX_AMOUNT_PAISE
@@ -88,6 +86,6 @@ class ExpenseResponse(BaseModel):
 
 
 class ExpenseList(BaseModel):
-    expenses: List[ExpenseResponse]
+    expenses: list[ExpenseResponse]
     total: Decimal
     count: int

@@ -9,19 +9,20 @@ Key behaviours:
 """
 from __future__ import annotations
 
-import os
 from decimal import Decimal
-from typing import Any, Optional
+from typing import Any
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
+from backend.config import API_BASE_URL as _DEFAULT_BASE_URL
+
 DEFAULT_TIMEOUT_SECONDS = 10.0
 
 
 class ExpenseAPIError(Exception):
-    def __init__(self, message: str, *, status: Optional[int] = None, details: Any = None):
+    def __init__(self, message: str, *, status: int | None = None, details: Any = None):
         super().__init__(message)
         self.status = status
         self.details = details
@@ -99,7 +100,7 @@ class APIClient:
         return self._decode(r)
 
     def list_expenses(
-        self, *, category: Optional[str] = None, sort: str = "date_desc"
+        self, *, category: str | None = None, sort: str = "date_desc"
     ) -> dict:
         params: dict[str, Any] = {"sort": sort}
         if category:
@@ -116,5 +117,4 @@ class APIClient:
 
 
 def get_client() -> APIClient:
-    base_url = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
-    return APIClient(base_url=base_url)
+    return APIClient(base_url=_DEFAULT_BASE_URL)
