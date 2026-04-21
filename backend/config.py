@@ -14,7 +14,7 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 DATABASE_URL: str = os.getenv(
     "DATABASE_URL", f"sqlite:///{DATA_DIR.as_posix()}/expenses.db"
-)
+).replace("postgres://", "postgresql://", 1)
 
 API_BASE_URL: str = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
 
