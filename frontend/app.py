@@ -200,7 +200,10 @@ with list_col:
         )
     with f2:
         st.selectbox(
-            "Sort by", options=["Newest first"], index=0, key="sort_choice"
+            "Sort by",
+            options=["Newest first", "Oldest first"],
+            index=0,
+            key="sort_choice",
         )
     with f3:
         st.markdown("&nbsp;", unsafe_allow_html=True)
@@ -210,9 +213,10 @@ with list_col:
     load_error: str | None = None
     try:
         with st.spinner("Loading expenses..."):
-            data = client.list_expenses(
+            sort_param = "date_asc" if st.session_state.sort_choice == "Oldest first" else "date_desc"
+        data = client.list_expenses(
                 category=None if filter_category == "All" else filter_category,
-                sort="date_desc",
+                sort=sort_param,
             )
     except ExpenseAPIError as exc:
         load_error = str(exc)
