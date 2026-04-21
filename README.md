@@ -9,8 +9,7 @@ idempotent — double-click, refresh, and flaky-network retries are all safe.
 
 ## Demo
 
-- **Live app**: _add your Streamlit Cloud URL here_
-- **API docs (OpenAPI)**: `<app-url>/docs` when the backend is reachable
+- **Live app**: [_Click Here !!_](https://personal-finance-tool-fenmo.streamlit.app/)
 
 ---
 
@@ -144,22 +143,8 @@ thread on first import, so a single deployment hosts the whole stack.
    - **Python version**: 3.11 (advanced settings)
 5. Click **"Deploy"**. Streamlit will install `requirements.txt` and boot
    the app. On first load the embedded FastAPI server also starts.
-6. Optional env vars (under **Settings → Secrets / Advanced**):
-   - `API_BASE_URL` — only if pointing at an external backend.
-   - `EMBEDDED_BACKEND=0` — disable the in-process backend (pair with
-     `API_BASE_URL`).
 
 ### Splitting frontend & backend (optional, cleaner)
-
-For a truer production split:
-
-1. Deploy the backend to Render / Railway / Fly:
-   ```bash
-   uvicorn backend.main:app --host 0.0.0.0 --port $PORT
-   ```
-2. In Streamlit Cloud, set `EMBEDDED_BACKEND=0` and
-   `API_BASE_URL=https://your-api.onrender.com`.
-
 ---
 
 ## Design decisions
